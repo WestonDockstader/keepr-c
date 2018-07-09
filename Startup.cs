@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using keepr_c.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
-// using keepr_c.Repositories; // wont be right until built
+
 
 namespace keepr_c
 {
@@ -52,8 +53,7 @@ namespace keepr_c
 			});
 			services.AddMvc();
 			services.AddTransient<IDbConnection>(x=>CreateDBContext());
-			//add repos
-			// services.AddTransient<UserRepos>();
+			services.AddTransient<UserRepository>();
     }
 
 		private IDbConnection CreateDBContext()
