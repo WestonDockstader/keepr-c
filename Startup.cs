@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using keepr_c.Repositories; // wont be right until built
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
+// using keepr_c.Repositories; // wont be right until built
 
 namespace keepr_c
 {
@@ -75,7 +75,6 @@ namespace keepr_c
         app.UseHsts();
       }
 
-      app.UseHttpsRedirection();
       app.UseMvc();
     }
   }
