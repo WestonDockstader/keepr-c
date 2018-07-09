@@ -41,13 +41,13 @@ namespace keepr_c
 			});
 			services.AddCors(Options=>
 			{
-				Options.AddPolicy("ANYORIGIN", BuilderExtensions=>
+				Options.AddPolicy("ANYORIGIN", builder=>
 				{
 					builder
 						.AllowAnyOrigin()
 						.AllowAnyHeader()
 						.AllowAnyMethod()
-						.AllowCredentials()
+						.AllowCredentials();
 				});
 			});
 			services.AddMvc();
