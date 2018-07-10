@@ -93,8 +93,5 @@ namespace keepr_c.Controllers
             }
             return "How did you even get here?";
         }
-
-
-
     }
 }

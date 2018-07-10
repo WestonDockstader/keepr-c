@@ -19,11 +19,17 @@ namespace keepr_c.Repositories
       //sql
       try
       {
-        string id = _db.ExecuteScalar<string>(@"
-                INSERT INTO users (Username, Email, Password)
-                VALUES (@Username, @Email, @Password);
+        string id = Guid.NewGuid().ToString();
+        _db.ExecuteScalar<string>(@"
+                INSERT INTO users (Id,Username, Email, Password)
+                VALUES (@Id, @Username, @Email, @Password);
                 SELECT LAST_INSERT_ID();
-            ", creds);
+            ", new{
+              Id=id,
+              Username=creds.Username,
+              Email=creds.Email,
+              Password=creds.Password
+            });
 
         return new UserReturnModel()
         {
