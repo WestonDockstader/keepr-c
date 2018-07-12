@@ -17,10 +17,10 @@ namespace keepr_c.Repositories
       newVault.Id=id;
       return newVault;
     }
-    // public void EditVault()
-    // {
-    //   _db.Execute("UPDATE vaults SET WHERE id=;");
-    // }
+    public void EditVault(Vault eVault)
+    {
+      _db.Execute("UPDATE vaults SET WHERE id=@id;",eVault);//This needs to be figured
+    }
     public void DeleteVault(int id)
     {
       _db.Execute("DELETE FROM vaults WHERE id=@id;",new{id});

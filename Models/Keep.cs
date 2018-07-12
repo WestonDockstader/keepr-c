@@ -1,6 +1,6 @@
 namespace keepr_c.Models
 {
-  public class Keeps
+  public class Keep
   {
     public int Id { get;set; }
     public string Name { get;set; }

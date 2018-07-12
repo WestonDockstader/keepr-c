@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace keepr_c.Controllers
 {
   [Route("[controller]")]
-  public class VaultController : Controller
+  public class VaultsController : Controller
   {
     private readonly VaultRepository db;
-    public VaultController(VaultRepository repo)
+    public VaultsController(VaultRepository repo)
     { 
       db = repo; 
     }
@@ -31,6 +31,14 @@ namespace keepr_c.Controllers
         return db.CreateVault(newVault);
       }
       return null;
+    }
+    [HttpPut("{id}")]
+    public void EditVault()
+    {}
+    [HttpDelete("{id}")]
+    public void Delete(int id)
+    {
+      db.DeleteVault(id);
     }
   }
 }
