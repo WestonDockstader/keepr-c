@@ -34,7 +34,7 @@ namespace keepr_c
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options=>
 			{
 				options.LoginPath="/Account/Login/";
-				options.Events.OnRedirectToLogin=(context)=>
+				options.Events.OnRedirectToLogin = context =>
 				{
 					context.Response.StatusCode=401;
 					return Task.CompletedTask;
@@ -42,9 +42,10 @@ namespace keepr_c
 			});
 			services.AddCors(Options=>
 			{
-				Options.AddPolicy("ANYORIGIN", builder=>
+				Options.AddPolicy("CorsDevPolicy", builder=>
 				{
 					builder
+					
 						.AllowAnyOrigin()
 						.AllowAnyHeader()
 						.AllowAnyMethod()
@@ -68,15 +69,20 @@ namespace keepr_c
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
-      if (env.IsDevelopment())
+      
+		  if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
+				app.UseCors("CorsDevPolicy");
       }
       else
       {
         app.UseHsts();
       }
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
 
+			app.UseAuthentication();
       app.UseMvc();
     }
   }

@@ -9,7 +9,8 @@
         </div>
         <div v-if="user.username">
           <h3>Hello {{user.username}}</h3>
-          <button class="btn btn-outline-info">Logout</button>
+          <button class="btn btn-outline-info" @click="logout">Logout</button>
+          <button class="btn btn-outline-info" @click="">My Profile</button>
         </div>
       </div>
     </nav>
@@ -39,7 +40,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submits" class="btn btn-primary" @click="userRegister">Register</button>
+            <button type="submits" class="btn btn-primary" @click="userRegister" data-dismiss="modal">Register</button>
           </div>
         </div>
       </div>
@@ -57,8 +58,8 @@
             <div class="modal-body">
               <form v-on:submit.prevent="userLogin">
                 <div class="form-group">
-                  <input type="text" name="username" v-model="login.username" class="form-control" id="formGroupExampleInput" placeholder="Username"
-                    required>
+                  <input type="text" name="email" v-model="login.email" class="form-control" id="formGroupExampleInput" placeholder="Email"
+                   autocomplete="email" required>
                 </div>
                 <div class="form-group">
                   <input type="text" name="password" v-model="login.password" class="form-control" id="formGroupExampleInput" placeholder="Password">
@@ -67,13 +68,17 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" @click="userLogin">Login</button>
+              <button type="submit" class="btn btn-primary" @click="userLogin" data-dismiss="modal">Login</button>
             </div>
           </div>
         </div>
       </div>
     <div class="row">
-    
+      <ol>
+        <li v-for="keep in keeps">
+          {{keep.name}}
+        </li>
+      </ol>
     </div>
   </div>
 </template>
@@ -89,14 +94,20 @@
           password: ""
         },
         login: {
-          username: "",
+          email: "",
           password: ""
         }
       }
     },
+    mounted(){
+      this.$store.dispatch('getKeeps')
+    },
     computed: {
       user() {
         return this.$store.state.user
+      },
+      keeps(){
+        return this.$store.state.keeps
       }
     },
     methods: {
@@ -104,8 +115,10 @@
         this.$store.dispatch('login', this.login)
       },
       userRegister() {
-        console.log("register method")
         this.$store.dispatch('register', this.register)
+      },
+      logout(){
+        this.$store.dispatch('logout')
       }
     }
   }

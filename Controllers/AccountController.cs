@@ -45,11 +45,17 @@ namespace keepr_c.Controllers
         if (user != null)
         {
           ClaimsPrincipal principal = user.SetClaims();
-          await HttpContext.SignInAsync(principal);
+          await HttpContext.SignInAsync(principal);   
           return user;
         }
       }
       return null;
+    }
+    [HttpDelete("logout")]
+    public async Task Logout()
+    {
+      await HttpContext.SignOutAsync();
+      //return "You logged out";
     }
     [HttpGet("authenticate")]
     public UserReturnModel Authenticate()
