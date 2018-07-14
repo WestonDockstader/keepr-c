@@ -52,7 +52,7 @@ namespace keepr_c.Controllers
       return null;
     }
     [HttpDelete("logout")]
-    public async Task Logout()
+    public async void Logout()
     {
       await HttpContext.SignOutAsync();
       //return "You logged out";

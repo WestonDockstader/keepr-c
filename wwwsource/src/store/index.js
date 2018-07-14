@@ -74,6 +74,15 @@ export default new vuex.Store({
           console.log('keeps' ,res.data)
           commit('setKeeps',res.data)
         })
+    },
+    authenticate({commit}){
+      auth.get('/authenticate')
+        .then(res=>{
+          commit('setUser',res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
       
   }
