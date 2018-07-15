@@ -10,7 +10,8 @@
         <div v-if="user.username">
           <h3>Hello {{user.username}}</h3>
           <button class="btn btn-outline-info" @click="logout">Logout</button>
-          <button class="btn btn-outline-info" @click="">My Profile</button>
+          <button v-if="home" class="btn btn-outline-info" @click="home=false, profile=true">My Profile</button>
+          <button v-if="profile" class="btn btn-outline-info" @click="home=true, profile=false">Home</button>
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#addKeepModal">+</button>
         </div>
       </div>
@@ -110,12 +111,18 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <ol>
-        <li v-for="keep in keeps">
-          {{keep.name}}
-        </li>
-      </ol>
+    <div class="row d-flex justify-content-around" v-if="home">
+      <div v-for="keep in keeps" class="keep">
+        <h3>{{keep.name}}</h3>
+        <img :src="keep.address" alt="keep.description">
+        <p>{{keep.description}}</p>
+        <p>Views: {{keep.views}}</p>
+        <p>Keeps: {{keep.keeps}}</p>
+        <button v-if="keep.userId==user.id" class="btn btn-outline-warning" @click="deleteKeep(keep)">X</button>
+      </div>
+    </div>
+    <div class="row" v-if="profile">
+
     </div>
   </div>
 </template>
@@ -139,9 +146,12 @@
           description: "",
           address: "",
           userId: "",
-          private: ""
+          private: 0
         },
-        pSetting : "Public"
+        pSetting : "Public",
+        home: true,
+        profile: false,
+        show: 0
       }
     },
     mounted() {
@@ -167,8 +177,7 @@
       },
       addKeep() {
         this.keep.userId=this.user.id
-        if(this.pSetting == "Public"){this.pSetting=0}else{this.pSetting=1}
-        this.keep.private= this.pSetting
+        this.keep.private=this.show
         console.log(this.keep)
         this.$store.dispatch('createKeep',this.keep)
         this.pSetting="Public"
@@ -176,10 +185,16 @@
       toggleSetting() {
         if(this.pSetting == "Public"){
           this.pSetting = "Private"
+          this.show=1
         }
         else{
           this.pSetting = "Public"
+          this.show=0
         }
+        console.log(this.pSetting)
+      },
+      deleteKeep(post){
+        this.$store.dispatch('deleteKeep',post.id)
       }
     }
   }
@@ -195,5 +210,10 @@
 
   .navbar-heading {
     padding: 3px;
+  }
+
+  .keep{
+    background-color: rgba(100,100,100,0.7);
+    border-radius: 20px;
   }
 </style>

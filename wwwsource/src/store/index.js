@@ -96,6 +96,15 @@ export default new vuex.Store({
         .catch(err=>{
           console.log(err)
         })
+    },
+    deleteKeep({dispatch},payload){
+      api.delete('keeps/'+payload)
+        .then(res=>{
+          dispatch('getKeeps')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
       
   }
