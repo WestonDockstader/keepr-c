@@ -86,7 +86,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form v-on:submit.prevent="addKeep(user)">
+            <form v-on:submit.prevent="addKeep">
               <div class="form-group">
                 <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
               </div>
@@ -96,12 +96,9 @@
               <div class="form-group">
                 <input type="text" name="address" v-model="keep.address" class="form-control" id="formGroupExampleInput" placeholder="Img Address" required>
               </div>
-              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                  <input type="radio" name="keep.private" id="option1" autocomplete="off" checked> Public
-                </label>
-                <label class="btn btn-secondary">
-                  <input type="radio" name="keep.private" id="option2" autocomplete="off"> Private
+              <div class="btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active" for="checkbox" @click="toggleSetting">
+                  <input type="checkbox" id="checkbox" checked autocomplete="off"> {{pSetting}}
                 </label>
               </div>
             </form>
@@ -142,9 +139,9 @@
           description: "",
           address: "",
           userId: "",
-          private: "",
-          keeps: 1
-        }
+          private: ""
+        },
+        pSetting : "Public"
       }
     },
     mounted() {
@@ -168,10 +165,21 @@
       logout() {
         this.$store.dispatch('logout')
       },
-      addKeep(user) {
-        console.log(this.user)
+      addKeep() {
         this.keep.userId=this.user.id
+        if(this.pSetting == "Public"){this.pSetting=0}else{this.pSetting=1}
+        this.keep.private= this.pSetting
         console.log(this.keep)
+        this.$store.dispatch('createKeep',this.keep)
+        this.pSetting="Public"
+      },
+      toggleSetting() {
+        if(this.pSetting == "Public"){
+          this.pSetting = "Private"
+        }
+        else{
+          this.pSetting = "Public"
+        }
       }
     }
   }

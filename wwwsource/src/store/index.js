@@ -68,17 +68,30 @@ export default new vuex.Store({
           console.log(err)
         })
     },
+    authenticate({commit}){
+      auth.get('/authenticate')
+        .then(res=>{
+          commit('setUser',res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
     getKeeps({commit}){
       api.get('keeps')
         .then(res=>{
           console.log('keeps' ,res.data)
           commit('setKeeps',res.data)
         })
+        .catch(err=>{
+          console.log(err)
+        })
     },
-    authenticate({commit}){
-      auth.get('/authenticate')
+    createKeep({dispatch},payload){
+      api.post('keeps',payload)
         .then(res=>{
-          commit('setUser',res.data)
+          console.log(res)
+          dispatch('getKeeps')
         })
         .catch(err=>{
           console.log(err)
