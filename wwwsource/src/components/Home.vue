@@ -95,7 +95,8 @@
                 <input type="text" name="description" v-model="keep.description" class="form-control" id="formGroupExampleInput" placeholder="Description">
               </div>
               <div class="form-group">
-                <input type="text" name="address" v-model="keep.address" class="form-control" id="formGroupExampleInput" placeholder="Img Address" required>
+                <input type="text" name="address" v-model="keep.address" class="form-control" id="formGroupExampleInput" placeholder="Img Address"
+                  required>
               </div>
               <div class="btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-secondary active" for="checkbox" @click="toggleSetting">
@@ -111,14 +112,35 @@
         </div>
       </div>
     </div>
-    <div class="row d-flex justify-content-around" v-if="home">
-      <div v-for="keep in keeps" class="keep">
+    <!-- View Keep Modal -->
+    <div class="modal fade" id="viewKeepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">{{viewKeep.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+              <img :src="viewKeep.address" alt="viewKeep.description">
+              <p>{{viewKeep.description}}</p>
+              <p>Views: {{viewKeep.views}}</p>
+              <p>Keeps: {{viewKeep.keeps}}</p>
+              <button v-if="viewKeep.userId==user.id" class="btn btn-outline-warning" @click="deleteKeep(viewKeep)" data-dismiss="modal">X</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" @click="" data-dismiss="modal">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- display all public keeps -->
+    <div class="row d-flex justify-content-around pt-3" v-if="home">
+      <div v-for="keep in keeps" v-if="keep.private==0" class="keep" @click="setViewKeep(keep)">
         <h3>{{keep.name}}</h3>
-        <img :src="keep.address" alt="keep.description">
-        <p>{{keep.description}}</p>
-        <p>Views: {{keep.views}}</p>
-        <p>Keeps: {{keep.keeps}}</p>
-        <button v-if="keep.userId==user.id" class="btn btn-outline-warning" @click="deleteKeep(keep)">X</button>
+        <img :src="keep.address" alt="">
       </div>
     </div>
     <div class="row" v-if="profile">
@@ -146,12 +168,15 @@
           description: "",
           address: "",
           userId: "",
-          private: 0
+          private: 0,
+          views: 0,
+          keeps: 0
         },
-        pSetting : "Public",
+        pSetting: "Public",
         home: true,
         profile: false,
-        show: 0
+        show: 0,
+        viewKeep: {}
       }
     },
     mounted() {
@@ -176,25 +201,33 @@
         this.$store.dispatch('logout')
       },
       addKeep() {
-        this.keep.userId=this.user.id
-        this.keep.private=this.show
+        this.keep.userId = this.user.id
+        this.keep.private = this.show
         console.log(this.keep)
-        this.$store.dispatch('createKeep',this.keep)
-        this.pSetting="Public"
+        this.$store.dispatch('createKeep', this.keep)
+        this.pSetting = "Public"
       },
       toggleSetting() {
-        if(this.pSetting == "Public"){
+        if (this.pSetting == "Public") {
           this.pSetting = "Private"
-          this.show=1
+          this.show = 1
         }
-        else{
+        else {
           this.pSetting = "Public"
-          this.show=0
+          this.show = 0
         }
-        console.log(this.pSetting)
+        console.log(this.show)
       },
-      deleteKeep(post){
-        this.$store.dispatch('deleteKeep',post.id)
+      deleteKeep(post) {
+        this.$store.dispatch('deleteKeep', post.id)
+      },
+      editKeep(keep) {
+        this.$store.dispatch('editKeep', keep)
+      },
+      setViewKeep(payload) {
+        this.$store.dispatch('editKeep', payload)
+        this.viewKeep = payload
+        $('#viewKeepModal').modal('show')
       }
     }
   }
@@ -212,8 +245,9 @@
     padding: 3px;
   }
 
-  .keep{
-    background-color: rgba(100,100,100,0.7);
+  .keep {
+    background-color: rgba(100, 100, 100, 0.5);
     border-radius: 20px;
+    padding: 1rem;
   }
 </style>

@@ -13,11 +13,6 @@ namespace keepr_c.Controllers
     { 
       db = repo; 
     }
-    [HttpGet]
-    public IEnumerable<Vault> GetAll()
-    { 
-      return db.GetAll(); 
-    }
     [HttpGet("{userId}")]
     public IEnumerable<Vault> GetAllByUserId(string userId)
     { 

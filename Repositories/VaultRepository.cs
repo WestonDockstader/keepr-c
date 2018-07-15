@@ -25,10 +25,6 @@ namespace keepr_c.Repositories
     {
       _db.Execute("DELETE FROM vaults WHERE id=@id;",new{id});
     }
-    public IEnumerable<Vault> GetAll()
-    {
-      return _db.Query<Vault>("SELECT * FROM vaults;");
-    }
     public IEnumerable<Vault> GetVaultsByUserId(string userId)
     {
       return _db.Query<Vault>("SELECT * FROM vaults WHERE userId=@userId", new{userId});

@@ -105,7 +105,15 @@ export default new vuex.Store({
         .catch(err=>{
           console.log(err)
         })
+    },
+    editKeep({dispatch},payload){
+      api.put('keeps/'+payload.id,payload)
+        .then(res=>{
+          dispatch('getKeeps')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
-      
   }
 })
