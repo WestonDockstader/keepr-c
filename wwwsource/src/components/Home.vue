@@ -136,15 +136,45 @@
         </div>
       </div>
     </div>
+    <!-- add vault modal -->
+    <div class="modal fade" id="addVaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Add Vault</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form v-on:submit.prevent="addVault">
+                <div class="form-group">
+                  <input type="text" name="name" v-model="vault.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
+                </div>
+                <div class="form-group">
+                  <input type="text" name="description" v-model="vault.description" class="form-control" id="formGroupExampleInput" placeholder="Description">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" @click="addVault" data-dismiss="modal">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- display all public keeps -->
     <div class="row d-flex justify-content-around pt-3" v-if="home">
-      <div v-for="keep in keeps" v-if="keep.private==0" class="keep" @click="setViewKeep(keep)">
+      <div v-for="keep in keeps" class="keep" @click="setViewKeep(keep)">
         <h3>{{keep.name}}</h3>
         <img :src="keep.address" alt="">
       </div>
     </div>
     <div class="row" v-if="profile">
-
+      <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addVaultModal">Create Vault</button>
+      <div v-for="vault in vaults">
+        {{vault.name}}
+      </div>
     </div>
   </div>
 </template>
@@ -176,7 +206,11 @@
         home: true,
         profile: false,
         show: 0,
-        viewKeep: {}
+        viewKeep: {},
+        vault:{
+          name: "",
+          description: ""
+        }
       }
     },
     mounted() {
@@ -188,6 +222,16 @@
       },
       keeps() {
         return this.$store.state.keeps
+      },
+      vaults() {
+        return this.$store.state.vaults
+      }
+    },
+    watch: {
+      user: {
+        handler(user){
+          this.$store.dispatch('getVaults', user.id)
+        }
       }
     },
     methods: {
@@ -198,6 +242,8 @@
         this.$store.dispatch('register', this.register)
       },
       logout() {
+        this.home=true
+        this.profile=false
         this.$store.dispatch('logout')
       },
       addKeep() {
@@ -225,9 +271,15 @@
         this.$store.dispatch('editKeep', keep)
       },
       setViewKeep(payload) {
+        payload.views++
+        payload.private = 0
         this.$store.dispatch('editKeep', payload)
         this.viewKeep = payload
         $('#viewKeepModal').modal('show')
+      },
+      addVault(){
+        this.vault.userId=this.user.id
+        this.$store.dispatch('addVault', this.vault)
       }
     }
   }

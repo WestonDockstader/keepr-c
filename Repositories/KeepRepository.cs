@@ -17,7 +17,7 @@ namespace keepr_c.Repositories
     }
     public void EditKeep(Keep eKeep)
     {
-      _db.Execute("UPDATE keeps SET WHERE id=@id",eKeep);//This needs to be figured
+      _db.Execute("UPDATE keeps SET description=@Description, privatepublic=@Private, name=@Name, views=@Views, keeps=@Keeps WHERE id=@id",eKeep);
     }
     public void DeleteKeep(int id)
     {

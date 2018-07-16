@@ -22,7 +22,8 @@ var auth = axios.create({
 export default new vuex.Store({
   state:{
     user: {},
-    keeps:{}
+    keeps:{},
+    vaults: {}
   },
   mutations:{
     setUser(state,payload){
@@ -33,6 +34,9 @@ export default new vuex.Store({
     },
     setKeeps(state,payload){
       state.keeps=payload
+    },
+    setVaults(state,payload){
+      state.vaults=payload
     }
   },
   actions:{
@@ -80,7 +84,6 @@ export default new vuex.Store({
     getKeeps({commit}){
       api.get('keeps')
         .then(res=>{
-          console.log('keeps' ,res.data)
           commit('setKeeps',res.data)
         })
         .catch(err=>{
@@ -110,6 +113,25 @@ export default new vuex.Store({
       api.put('keeps/'+payload.id,payload)
         .then(res=>{
           dispatch('getKeeps')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    getVaults({commit},payload){
+      api.get('vaults/'+payload)
+        .then(res=>{
+          console.log(res.data)
+          commit('setVaults',res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    addVault({dispatch},payload){
+      api.post('vaults',payload)
+        .then(res=>{
+          dispatch('getVaults')
         })
         .catch(err=>{
           console.log(err)

@@ -45,7 +45,6 @@ namespace keepr_c
 				Options.AddPolicy("CorsDevPolicy", builder=>
 				{
 					builder
-					
 						.AllowAnyOrigin()
 						.AllowAnyHeader()
 						.AllowAnyMethod()

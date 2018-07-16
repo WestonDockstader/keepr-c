@@ -33,8 +33,10 @@ namespace keepr_c.Controllers
       return null;
     }
     [HttpPut("{id}")]
-    public void EditKeep()
-    {}
+    public void EditKeep([FromBody]Keep aKeep)
+    {
+      db.EditKeep(aKeep);
+    }
     [HttpDelete("{id}")]
     public void Delete(int id)
     {

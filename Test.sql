@@ -26,16 +26,16 @@ CREATE TABLE keeps (
     description VARCHAR(255) NOT NULL,
     address VARCHAR(255),
     userId VARCHAR(255),
-    privatepublic TINYINT(1),
-    views INT,
-    keeps INT,
+    privatepublic int NOT NULL,
+    views INT NOT NULL,
+    keeps INT NOT NULL,
     INDEX userId (userId),
     FOREIGN KEY (userId)
         REFERENCES users(id)
         ON DELETE CASCADE,  
     PRIMARY KEY (id)
 );
-
+-- changed publicprivate to string
 
 -- SELECT * FROM users;
 
