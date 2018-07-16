@@ -134,10 +134,12 @@
             <form v-on:submit.prevent="">
                 <div class="form-group">
                   <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
+                  <!-- This is my dropdown for vaults -->
                   <select v-model="selected" @change="addToVault(viewKeep.id)">
                     <option disabled value="">Select Vault</option>
                     <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
                   </select>
+
                   </div>
               </form>
             <button type="submit" class="btn btn-primary" data-dismiss="modal">Save to Vault</button>
