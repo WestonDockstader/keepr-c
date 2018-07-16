@@ -134,7 +134,7 @@
             <form v-on:submit.prevent="">
                 <div class="form-group">
                   <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
-                  <select v-model="selected">
+                  <select v-model="selected" @change="addToVault(viewKeep.id)">
                     <option disabled value="">Select Vault</option>
                     <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
                   </select>
@@ -219,6 +219,12 @@
         vault:{
           name: "",
           description: ""
+        },
+        selected: "",
+        vaultkeep:{
+          vaultId: '',
+          keepId: '',
+          userId: ''
         }
       }
     },
@@ -289,6 +295,15 @@
       addVault(){
         this.vault.userId=this.user.id
         this.$store.dispatch('addVault', this.vault)
+      },
+      deleteVault(){
+
+      },
+      addToVault(keepId){
+        this.vaultkeep.vaultId=this.selected
+        this.vaultkeep.keepId=this.keepId
+        this.vaultkeep.userId=this.user.id
+        this.$store.dispatch('addToVaultKeep',this.vaultkeep)
       }
     }
   }

@@ -137,6 +137,26 @@ export default new vuex.Store({
         .catch(err=>{
           console.log(err)
         })
+    },
+    getUserVaultKeeps({commit,state}){
+      api.get('vaultkeeps/'+state.user.id)
+        .then(res=>{
+          console.log('vaultkeeps',res)
+          commit('setVaultKeeps',res.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    addToVaultKeep({dispatch},payload){
+      api.post('vaultkeeps',payload)
+        .then(res=>{
+          console.log(res)
+          dispatch('getUserVaultKeeps')
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
   }
 })
