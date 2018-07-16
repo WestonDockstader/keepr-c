@@ -11,7 +11,7 @@ namespace keepr_c.Repositories
     {}
     public VaultKeep CreateVaultKeep(VaultKeep newVaultKeep)
     {
-      int id=_db.ExecuteScalar<int>("INSERT INTO vaultkeeps (vaultId,keepId,userId) VALUES (@VaultId,@KeepId,@UserId); SELECT LAST_INSERT_ID();",newVaultKeep);
+      int id=_db.ExecuteScalar<int>("INSERT INTO vaultkeeps (vaultId,keepId,userId) VALUES(@VaultId,@KeepId,@UserId); SELECT LAST_INSERT_ID();",newVaultKeep);
       newVaultKeep.Id=id;
       return newVaultKeep;
     }
@@ -26,6 +26,11 @@ namespace keepr_c.Repositories
     public IEnumerable<VaultKeep> GetVaultKeepsByUserId(string userId)
     {
       return _db.Query<VaultKeep>("SELECT * FROM vaultkeeps WHERE userId=@userId",new{userId});
+    }
+
+    public IEnumerable<VaultKeep> GetVaultKeeps(int id)
+    {
+      return _db.Query<VaultKeep>("SELECT * FROM vaultkeeps vk INNER JOIN keeps k ON k.id = vk.keepId WHERE (vaultId = @id)",new{id});
     }
   }
 }

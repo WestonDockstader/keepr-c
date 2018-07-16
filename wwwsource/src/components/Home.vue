@@ -129,20 +129,20 @@
               <p>Keeps: {{viewKeep.keeps}}</p>
               <button v-if="viewKeep.userId==user.id" class="btn btn-outline-warning" @click="deleteKeep(viewKeep)" data-dismiss="modal">X</button>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer d-flex justify-content-around">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <form v-on:submit.prevent="">
                 <div class="form-group">
-                  <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
+                  <!-- <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required> -->
                   <!-- This is my dropdown for vaults -->
-                  <select v-model="selected" @change="addToVault(viewKeep.id)">
+                  <select v-model="selected">
                     <option disabled value="">Select Vault</option>
                     <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
                   </select>
 
                   </div>
               </form>
-            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save to Vault</button>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal" @click="addToVault(viewKeep.id)">Save to Vault</button>
           </div>
         </div>
       </div>
@@ -181,14 +181,24 @@
         <img :src="keep.address" alt="">
       </div>
     </div>
+    <!-- display profile -->
     <div class="row text-center" v-if="profile">
-      <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addVaultModal">Create Vault</button>
-      <h3 v-if="vaults">Your Vaults</h3>
-      <div v-for="vault in vaults" class="vault">
-        <h4>{{vault.name}}</h4>
-        <button class="btn btn-outline-primary" @click="deleteVault(vault)">X</button>
+      <div class="col-12 mt-2 justify-content-around">
+        <button class="btn btn-outline-success" data-toggle="modal" data-target="#addVaultModal">Create Vault</button>
+        <button class="btn btn-outline-success" @click="profileView=0">My Vaults</button>
+        <button class="btn btn-outline-success" @click="profileView=1">My Keeps</button>
+        <hr>
       </div>
-      <hr>
+      <div class="col" v-if="profileView==0">
+        <h3 v-if="vaults">Your Vaults</h3>
+        <div v-for="vault in vaults" class="vault d-flex flex-row justify-content-around">
+          <h4>{{vault.name}}</h4>
+          <button class="btn btn-outline-danger" @click="deleteVault(vault)">X</button>
+        </div>
+      </div>
+      <div class="col" v-if="profileView==1">
+        <h3>Coming Soon...</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -230,7 +240,8 @@
           vaultId: '',
           keepId: '',
           userId: ''
-        }
+        },
+        profileView: 0
       }
     },
     mounted() {
@@ -303,10 +314,12 @@
         this.$store.dispatch('deleteVault',vault.id)
       },
       addToVault(keepId){
+        
         this.vaultkeep.vaultId=this.selected
-        this.vaultkeep.keepId=this.keepId
+        this.vaultkeep.keepId=keepId
         this.vaultkeep.userId=this.user.id
         this.$store.dispatch('addToVaultKeep',this.vaultkeep)
+        this.selected=''
       }
     }
   }

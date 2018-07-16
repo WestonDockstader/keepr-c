@@ -23,7 +23,9 @@ export default new vuex.Store({
   state:{
     user: {},
     keeps:{},
-    vaults: {}
+    vaults: {},
+    //testing
+    vaultkeeps: {}
   },
   mutations:{
     setUser(state,payload){
@@ -37,6 +39,10 @@ export default new vuex.Store({
     },
     setVaults(state,payload){
       state.vaults=payload
+    },
+    // testing
+    setVaultKeeps(state, payload){
+      state.vaultkeeps=payload
     }
   },
   actions:{
@@ -93,7 +99,6 @@ export default new vuex.Store({
     createKeep({dispatch},payload){
       api.post('keeps',payload)
         .then(res=>{
-          console.log(res)
           dispatch('getKeeps')
         })
         .catch(err=>{
@@ -121,7 +126,6 @@ export default new vuex.Store({
     getVaults({commit},payload){
       api.get('vaults/'+payload)
         .then(res=>{
-          console.log(res.data)
           commit('setVaults',res.data)
         })
         .catch(err=>{
@@ -131,7 +135,6 @@ export default new vuex.Store({
     addVault({dispatch,state},payload){
       api.post('vaults',payload)
         .then(res=>{
-          console.log('added vault', res.data)
           dispatch('getVaults',state.user.id)
         })
         .catch(err=>{
@@ -141,7 +144,6 @@ export default new vuex.Store({
     deleteVault({dispatch,state},payload){
       api.delete('vaults/'+payload)
         .then(res=>{
-          console.log(res)
           dispatch('getVaults',state.user.id)
         })
         .catch(err=>{
@@ -149,9 +151,9 @@ export default new vuex.Store({
         })
     },
     getUserVaultKeeps({commit,state}){
-      api.get('vaultkeeps/'+state.user.id)
+      api.get('vaultkeeps/vk/'+state.user.id)
         .then(res=>{
-          console.log('vaultkeeps',res)
+          console.log('vaultkeeps',res.data)
           commit('setVaultKeeps',res.data)
         })
         .catch(err=>{

@@ -35,5 +35,10 @@ namespace keepr_c.Controllers
     [HttpPut("{id}")]
     public void EditVaultKeep()
     {}
+    [HttpGet("vk/{id}")]
+    public IEnumerable<VaultKeep> GetVaultKeeps(int id)
+    {
+      return db.GetVaultKeeps(id);
+    }
   }
 }
