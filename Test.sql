@@ -26,7 +26,7 @@
 --     description VARCHAR(255) NOT NULL,
 --     address VARCHAR(255),
 --     userId VARCHAR(255),
---     privatepublic int NOT NULL,
+--     shareable   TINYINT(1) NOT NULL DEFAULT 1,
 --     views INT NOT NULL,
 --     keeps INT NOT NULL,
 --     INDEX userId (userId),
@@ -66,7 +66,7 @@
 -- USE THIS LINE FOR GET KEEPS BY VAULTID
 -- SELECT * FROM vaultkeeps vk
 -- INNER JOIN keeps k ON k.id = vk.keepId 
--- WHERE (vaultId = 2)
+-- WHERE (vaultId = 10)
 
 
-SELECT * FROM keeps;
+-- SELECT * FROM vaultkeeps;

@@ -150,8 +150,8 @@ export default new vuex.Store({
           console.log(err)
         })
     },
-    getUserVaultKeeps({commit,state}){
-      api.get('vaultkeeps/vk/'+state.user.id)
+    getVaultKeeps({commit},payload){
+      api.get('vaultkeeps/vk/'+payload)
         .then(res=>{
           console.log('vaultkeeps',res.data)
           commit('setVaultKeeps',res.data)
@@ -160,11 +160,10 @@ export default new vuex.Store({
           console.log(err)
         })
     },
-    addToVaultKeep({dispatch},payload){
+    addToVaultKeep(payload){
       api.post('vaultkeeps',payload)
         .then(res=>{
-          console.log(res)
-          dispatch('getUserVaultKeeps')
+          console.log(res.data)
         })
         .catch(err=>{
           console.log(err)

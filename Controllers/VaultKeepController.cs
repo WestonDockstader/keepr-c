@@ -13,11 +13,11 @@ namespace keepr_c.Controllers
     {
       db=repo;
     }
-    [HttpGet("{userId}")]
-    public IEnumerable<VaultKeep> GetAllByUserId(string userId)
-    {
-      return db.GetVaultKeepsByUserId(userId);
-    }
+    // [HttpGet("{userId}")]
+    // public IEnumerable<VaultKeep> GetAllByUserId(string userId)
+    // {
+    //   return db.GetVaultKeepsByUserId(userId);
+    // }
     [HttpPost]
     public VaultKeep Create([FromBody]VaultKeep newVaultKeep)
     {
@@ -36,7 +36,7 @@ namespace keepr_c.Controllers
     public void EditVaultKeep()
     {}
     [HttpGet("vk/{id}")]
-    public IEnumerable<VaultKeep> GetVaultKeeps(int id)
+    public IEnumerable<Keep> GetVaultKeeps(int id)
     {
       return db.GetVaultKeeps(id);
     }

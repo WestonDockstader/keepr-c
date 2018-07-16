@@ -23,14 +23,14 @@ namespace keepr_c.Repositories
     {
       _db.Execute("DELETE FROM vaultkeeps WHERE id=@id;",new{id});
     }
-    public IEnumerable<VaultKeep> GetVaultKeepsByUserId(string userId)
-    {
-      return _db.Query<VaultKeep>("SELECT * FROM vaultkeeps WHERE userId=@userId",new{userId});
-    }
+    // public IEnumerable<VaultKeep> GetVaultKeepsByUserId(string userId)
+    // {
+    //   return _db.Query<VaultKeep>("SELECT * FROM vaultkeeps WHERE userId=@userId",new{userId});
+    // }
 
-    public IEnumerable<VaultKeep> GetVaultKeeps(int id)
+    public IEnumerable<Keep> GetVaultKeeps(int id)
     {
-      return _db.Query<VaultKeep>("SELECT * FROM vaultkeeps vk INNER JOIN keeps k ON k.id = vk.keepId WHERE (vaultId = @id)",new{id});
+      return _db.Query<Keep>("SELECT * FROM vaultkeeps vk INNER JOIN keeps k ON k.id = vk.keepId WHERE (vaultId = @id)",new{id});
     }
   }
 }

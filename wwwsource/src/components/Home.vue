@@ -191,7 +191,7 @@
       </div>
       <div class="col" v-if="profileView==0">
         <h3 v-if="vaults">Your Vaults</h3>
-        <div v-for="vault in vaults" class="vault d-flex flex-row justify-content-around">
+        <div v-for="vault in vaults" class="vault d-flex flex-row justify-content-around" @click="getVaultKeeps(vault.id)">
           <h4>{{vault.name}}</h4>
           <button class="btn btn-outline-danger" @click="deleteVault(vault)">X</button>
         </div>
@@ -222,7 +222,7 @@
           description: "",
           address: "",
           userId: "",
-          private: 0,
+          shareable: 0,
           views: 0,
           keeps: 0
         },
@@ -256,6 +256,9 @@
       },
       vaults() {
         return this.$store.state.vaults
+      },
+      vaultkeeps(){
+        return this.$store.state.vaultkeeps
       }
     },
     watch:{
@@ -277,7 +280,7 @@
       },
       addKeep() {
         this.keep.userId = this.user.id
-        this.keep.private = this.show
+        this.keep.shareable = this.show
         console.log(this.keep)
         this.$store.dispatch('createKeep', this.keep)
         this.pSetting = "Public"
@@ -320,6 +323,9 @@
         this.vaultkeep.userId=this.user.id
         this.$store.dispatch('addToVaultKeep',this.vaultkeep)
         this.selected=''
+      },
+      getVaultKeeps(payload){
+        this.$store.dispatch('getVaultKeeps',payload)
       }
     }
   }
