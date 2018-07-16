@@ -131,6 +131,7 @@ export default new vuex.Store({
     addVault({dispatch},payload){
       api.post('vaults',payload)
         .then(res=>{
+          console.log('added vault', res.data)
           dispatch('getVaults')
         })
         .catch(err=>{

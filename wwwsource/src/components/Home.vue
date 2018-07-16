@@ -131,7 +131,16 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" @click="" data-dismiss="modal">Submit</button>
+            <form v-on:submit.prevent="">
+                <div class="form-group">
+                  <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
+                  <select v-model="selected">
+                    <option disabled value="">Select Vault</option>
+                    <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
+                  </select>
+                  </div>
+              </form>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save to Vault</button>
           </div>
         </div>
       </div>
