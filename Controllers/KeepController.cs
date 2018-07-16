@@ -42,15 +42,5 @@ namespace keepr_c.Controllers
     {
       db.DeleteKeep(id);
     }
-    [HttpPost("{vaultId}/keeps/{keepId}")]
-    public void AddtoVault(int keepId, int vaultId, string userId)
-    {
-      db.AddtoVault(keepId,vaultId,userId);
-    }
-    [HttpDelete("rel/{id}")]
-    public void RemoveFromVault(int id)
-    {
-      db.RemoveFromVault(id);
-    }
   }
 }

@@ -181,11 +181,14 @@
         <img :src="keep.address" alt="">
       </div>
     </div>
-    <div class="row" v-if="profile">
+    <div class="row text-center" v-if="profile">
       <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addVaultModal">Create Vault</button>
-      <div v-for="vault in vaults">
-        {{vault.name}}
+      <h3 v-if="vaults">Your Vaults</h3>
+      <div v-for="vault in vaults" class="vault">
+        <h4>{{vault.name}}</h4>
+        <button class="btn btn-outline-primary" @click="deleteVault(vault)">X</button>
       </div>
+      <hr>
     </div>
   </div>
 </template>
@@ -244,11 +247,9 @@
         return this.$store.state.vaults
       }
     },
-    watch: {
-      user: {
-        handler(user){
-          this.$store.dispatch('getVaults', user.id)
-        }
+    watch:{
+      user: function(){
+        this.$store.dispatch('getVaults', this.user.id)
       }
     },
     methods: {
@@ -298,8 +299,8 @@
         this.vault.userId=this.user.id
         this.$store.dispatch('addVault', this.vault)
       },
-      deleteVault(){
-
+      deleteVault(vault){
+        this.$store.dispatch('deleteVault',vault.id)
       },
       addToVault(keepId){
         this.vaultkeep.vaultId=this.selected
@@ -327,5 +328,11 @@
     background-color: rgba(100, 100, 100, 0.5);
     border-radius: 20px;
     padding: 1rem;
+  }
+
+  .vault{
+    background-color: rgba(100,100,100,.5);
+    border-radius: 10px;
+    padding: 0.5rem; 
   }
 </style>

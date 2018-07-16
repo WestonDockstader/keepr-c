@@ -128,11 +128,21 @@ export default new vuex.Store({
           console.log(err)
         })
     },
-    addVault({dispatch},payload){
+    addVault({dispatch,state},payload){
       api.post('vaults',payload)
         .then(res=>{
           console.log('added vault', res.data)
-          dispatch('getVaults')
+          dispatch('getVaults',state.user.id)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    deleteVault({dispatch,state},payload){
+      api.delete('vaults/'+payload)
+        .then(res=>{
+          console.log(res)
+          dispatch('getVaults',state.user.id)
         })
         .catch(err=>{
           console.log(err)

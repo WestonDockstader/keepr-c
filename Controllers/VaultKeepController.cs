@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace keepr_c.Controllers
 {
   [Route("[controller]")]
-  public class VaultKeepsController:Controllers
+  public class VaultKeepsController:Controller
   {
     private readonly VaultKeepsRepository db;
     public VaultKeepsController(VaultKeepsRepository repo)
