@@ -26,7 +26,7 @@
 --     description VARCHAR(255) NOT NULL,
 --     address VARCHAR(255),
 --     userId VARCHAR(255),
---     shareable   TINYINT(1) NOT NULL DEFAULT 1,
+--     shareable TINYINT(1) NOT NULL DEFAULT 1,
 --     views INT NOT NULL,
 --     keeps INT NOT NULL,
 --     INDEX userId (userId),

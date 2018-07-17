@@ -160,7 +160,8 @@ export default new vuex.Store({
           console.log(err)
         })
     },
-    addToVaultKeep(payload){
+    addToVaultKeep({},payload){
+      console.log("this payload went to store",payload)
       api.post('vaultkeeps',payload)
         .then(res=>{
           console.log(res.data)

@@ -178,7 +178,7 @@
     <div class="row d-flex justify-content-around pt-3" v-if="home">
       <div v-for="keep in keeps" class="keep" @click="setViewKeep(keep)">
         <h3>{{keep.name}}</h3>
-        <img :src="keep.address" alt="">
+        <img :src="keep.address" class="keep-img" alt="">
       </div>
     </div>
     <!-- display profile -->
@@ -190,14 +190,27 @@
         <hr>
       </div>
       <div class="col" v-if="profileView==0">
-        <h3 v-if="vaults">Your Vaults</h3>
-        <div v-for="vault in vaults" class="vault d-flex flex-row justify-content-around" @click="getVaultKeeps(vault.id)">
+        <!-- view a list of vaults -->
+        <h3 v-if="viewvaults">Your Vaults</h3>
+        <div v-if="viewvaults" v-for="vault in vaults" class="vault d-flex flex-row justify-content-around" @click="getVaultKeeps(vault.id),viewvaults=false,vaultname=vault.name">
           <h4>{{vault.name}}</h4>
           <button class="btn btn-outline-danger" @click="deleteVault(vault)">X</button>
         </div>
+        <!-- View vault after selected -->
+        <div v-if="!viewvaults">
+          {{vaultname}}
+          <button class="btn btn-outline-success" @click="viewvaults=true,vaultname=''">Back</button>
+        </div>
+        <div v-if="!viewvaults" v-for="keep in vaultkeeps">
+          <h3>{{keep.name}}</h3>
+          <img :src="keep.address" class="keep-img" alt="">
+        </div>
       </div>
       <div class="col" v-if="profileView==1">
-        <h3>Coming Soon...</h3>
+        <div class="" v-for="keep in keeps" v-if="keep.userId==user.id">
+          <h3>{{keep.name}}</h3>
+          <img :src="keep.address" class="keep-img" alt="">
+        </div>
       </div>
     </div>
   </div>
@@ -241,7 +254,9 @@
           keepId: '',
           userId: ''
         },
-        profileView: 0
+        profileView: 0,
+        viewvaults: true,
+        vaultname: ''
       }
     },
     mounted() {
@@ -296,15 +311,25 @@
         }
         console.log(this.show)
       },
+      resetBool(keep){
+        if(keep.shareable=='True'){
+          keep.shareable=1
+        }
+        else{
+          keep.shareable=0
+        }
+      },
       deleteKeep(post) {
         this.$store.dispatch('deleteKeep', post.id)
       },
-      editKeep(keep) {
-        this.$store.dispatch('editKeep', keep)
+      editKeep(payload) {
+        payload.shareable = payload.shareable ? 1 : 0
+        this.$store.dispatch('editKeep', payload)
       },
       setViewKeep(payload) {
         payload.views++
-        payload.private = 0
+        payload.shareable = payload.shareable ? 1 : 0
+        console.log('setviewkeep disp',payload)
         this.$store.dispatch('editKeep', payload)
         this.viewKeep = payload
         $('#viewKeepModal').modal('show')
@@ -317,10 +342,10 @@
         this.$store.dispatch('deleteVault',vault.id)
       },
       addToVault(keepId){
-        
         this.vaultkeep.vaultId=this.selected
         this.vaultkeep.keepId=keepId
         this.vaultkeep.userId=this.user.id
+        debugger
         this.$store.dispatch('addToVaultKeep',this.vaultkeep)
         this.selected=''
       },
@@ -347,6 +372,12 @@
     background-color: rgba(100, 100, 100, 0.5);
     border-radius: 20px;
     padding: 1rem;
+  }
+
+  .keep-img {
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
   }
 
   .vault{
