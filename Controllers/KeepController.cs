@@ -26,6 +26,8 @@ namespace keepr_c.Controllers
     [HttpPost]
     public Keep Create([FromBody]Keep newKeep)
     { 
+      // var user = HttpContext.User;
+      // newKeep.UserId = user.Identity.Name;
       if(ModelState.IsValid)
       {
         return db.CreateKeep(newKeep);

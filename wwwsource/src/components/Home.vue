@@ -123,62 +123,78 @@
             </button>
           </div>
           <div class="modal-body text-center">
-              <img :src="viewKeep.address" alt="viewKeep.description">
-              <p>{{viewKeep.description}}</p>
-              <p>Views: {{viewKeep.views}}</p>
-              <p>Keeps: {{viewKeep.keeps}}</p>
+            <img :src="viewKeep.address" alt="viewKeep.description">
+            <p>{{viewKeep.description}}</p>
+            <p>Views: {{viewKeep.views}}</p>
+            <p>Keeps: {{viewKeep.keeps}}</p>
+            <div v-if="viewKeep.shareable==1 || viewKeep.userId==user.id">
               <button v-if="viewKeep.userId==user.id" class="btn btn-outline-warning" @click="deleteKeep(viewKeep)" data-dismiss="modal">X</button>
+            </div>
           </div>
           <div class="modal-footer d-flex justify-content-around">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <form v-on:submit.prevent="">
-                <div class="form-group">
-                  <!-- <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required> -->
-                  <!-- This is my dropdown for vaults -->
-                  <select v-model="selected">
-                    <option disabled value="">Select Vault</option>
-                    <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
-                  </select>
+              <div class="form-group">
+                <!-- <input type="text" name="name" v-model="keep.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required> -->
+                <!-- This is my dropdown for vaults -->
+                <select v-model="selected">
+                  <option disabled value="">Select Vault</option>
+                  <option v-for="vault in vaults" v-bind:value="vault.id">{{vault.name}}</option>
+                </select>
 
-                  </div>
-              </form>
-            <button type="submit" class="btn btn-primary" data-dismiss="modal" @click="addToVault(viewKeep.id)">Save to Vault</button>
+              </div>
+            </form>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal" @click="addToVault(viewKeep)">Save to Vault</button>
           </div>
         </div>
       </div>
     </div>
     <!-- add vault modal -->
     <div class="modal fade" id="addVaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalCenterTitle">Add Vault</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form v-on:submit.prevent="addVault">
-                <div class="form-group">
-                  <input type="text" name="name" v-model="vault.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
-                </div>
-                <div class="form-group">
-                  <input type="text" name="description" v-model="vault.description" class="form-control" id="formGroupExampleInput" placeholder="Description">
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" @click="addVault" data-dismiss="modal">Submit</button>
-            </div>
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Add Vault</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form v-on:submit.prevent="addVault">
+              <div class="form-group">
+                <input type="text" name="name" v-model="vault.name" class="form-control" id="formGroupExampleInput" placeholder="Title" required>
+              </div>
+              <div class="form-group">
+                <input type="text" name="description" v-model="vault.description" class="form-control" id="formGroupExampleInput" placeholder="Description">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" @click="addVault" data-dismiss="modal">Submit</button>
           </div>
         </div>
       </div>
+    </div>
     <!-- display all public keeps -->
     <div class="row d-flex justify-content-around pt-3" v-if="home">
-      <div v-for="keep in keeps" class="keep" @click="setViewKeep(keep)">
+      <div v-for="keep in keeps" v-if="!keep.shareable" class="keep">
         <h3>{{keep.name}}</h3>
         <img :src="keep.address" class="keep-img" alt="">
+        <div class="place-btn text-center">
+          <button class="btn btn-outline-warning btn-view" @click="setViewKeep(keep)">View</button>
+          <div class="dropdown place-btn-dropdown">
+            <!-- this is the dropdown button -->
+            <button class="btn btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Add To Vault
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <button class="dropdown-item" v-for="vault in vaults" @click="addToVault(keep),selected=vault.id">{{vault.name}}</button>
+            </div>
+          </div>
+          <!-- <button class="btn btn-outline-warning" disabled>Share</button> -->
+        </div>
       </div>
     </div>
     <!-- display profile -->
@@ -201,15 +217,26 @@
           {{vaultname}}
           <button class="btn btn-outline-success" @click="viewvaults=true,vaultname=''">Back</button>
         </div>
-        <div v-if="!viewvaults" v-for="keep in vaultkeeps">
+        <div class="keep" v-if="!viewvaults" v-for="keep in vaultkeeps">
           <h3>{{keep.name}}</h3>
           <img :src="keep.address" class="keep-img" alt="">
+          <div class="place-btn text-center">
+            <button class="btn btn-outline-warning btn-view" @click="setViewKeep(keep)">View</button>
+            <div v-if="keep.shareable" class="btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-secondary active" for="checkbox" @click="toggleSetting">
+                <input type="checkbox" id="checkbox" checked autocomplete="off"> {{pSetting}}
+              </label>
+              <button @click="editKeep(keep)" class="btn btn-outline-success">Submit</button>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- view profile keeps -->
       <div class="col" v-if="profileView==1">
-        <div class="" v-for="keep in keeps" v-if="keep.userId==user.id">
+        <div class="mt-2 keep" v-for="keep in keeps" v-if="keep.userId==user.id">
           <h3>{{keep.name}}</h3>
           <img :src="keep.address" class="keep-img" alt="">
+          <button class="btn btn-outline-warning btn-view" @click="setViewKeep(keep)">View</button>
         </div>
       </div>
     </div>
@@ -239,17 +266,17 @@
           views: 0,
           keeps: 0
         },
-        pSetting: "Public",
+        pSetting: "Private",
         home: true,
         profile: false,
         show: 0,
         viewKeep: {},
-        vault:{
+        vault: {
           name: "",
           description: ""
         },
         selected: "",
-        vaultkeep:{
+        vaultkeep: {
           vaultId: '',
           keepId: '',
           userId: ''
@@ -272,12 +299,12 @@
       vaults() {
         return this.$store.state.vaults
       },
-      vaultkeeps(){
+      vaultkeeps() {
         return this.$store.state.vaultkeeps
       }
     },
-    watch:{
-      user: function(){
+    watch: {
+      user: function () {
         this.$store.dispatch('getVaults', this.user.id)
       }
     },
@@ -289,14 +316,13 @@
         this.$store.dispatch('register', this.register)
       },
       logout() {
-        this.home=true
-        this.profile=false
+        this.home = true
+        this.profile = false
         this.$store.dispatch('logout')
       },
       addKeep() {
-        this.keep.userId = this.user.id
+        this.keep.userId=this.user.id
         this.keep.shareable = this.show
-        console.log(this.keep)
         this.$store.dispatch('createKeep', this.keep)
         this.pSetting = "Public"
       },
@@ -309,48 +335,41 @@
           this.pSetting = "Public"
           this.show = 0
         }
-        console.log(this.show)
-      },
-      resetBool(keep){
-        if(keep.shareable=='True'){
-          keep.shareable=1
-        }
-        else{
-          keep.shareable=0
-        }
       },
       deleteKeep(post) {
         this.$store.dispatch('deleteKeep', post.id)
       },
       editKeep(payload) {
-        payload.shareable = payload.shareable ? 1 : 0
+        payload.shareable = this.show
+        console.log(payload)
         this.$store.dispatch('editKeep', payload)
+        this.pSetting="Private"
       },
       setViewKeep(payload) {
         payload.views++
         payload.shareable = payload.shareable ? 1 : 0
-        console.log('setviewkeep disp',payload)
         this.$store.dispatch('editKeep', payload)
         this.viewKeep = payload
         $('#viewKeepModal').modal('show')
       },
-      addVault(){
+      addVault() {
         this.vault.userId=this.user.id
         this.$store.dispatch('addVault', this.vault)
       },
-      deleteVault(vault){
-        this.$store.dispatch('deleteVault',vault.id)
+      deleteVault(vault) {
+        this.$store.dispatch('deleteVault', vault.id)
       },
-      addToVault(keepId){
-        this.vaultkeep.vaultId=this.selected
-        this.vaultkeep.keepId=keepId
-        this.vaultkeep.userId=this.user.id
-        debugger
-        this.$store.dispatch('addToVaultKeep',this.vaultkeep)
-        this.selected=''
+      addToVault(keep) {
+        keep.keeps++
+        this.$store.dispatch('editKeep', keep)
+        this.vaultkeep.vaultId = this.selected
+        this.vaultkeep.keepId = keep.id
+        this.vaultkeep.userId = this.user.id
+        this.$store.dispatch('addToVaultKeep', this.vaultkeep)
+        this.selected = ''
       },
-      getVaultKeeps(payload){
-        this.$store.dispatch('getVaultKeeps',payload)
+      getVaultKeeps(payload) {
+        this.$store.dispatch('getVaultKeeps', payload)
       }
     }
   }
@@ -368,21 +387,46 @@
     padding: 3px;
   }
 
+  .vault {
+    background-color: rgba(100, 100, 100, .5);
+    border-radius: 10px;
+    padding: 0.5rem;
+  }
+
   .keep {
     background-color: rgba(100, 100, 100, 0.5);
     border-radius: 20px;
-    padding: 1rem;
+    padding: 1rem 1rem;
+    margin-top: 1rem;
+    position: relative;
   }
 
   .keep-img {
     height: 300px;
     width: 300px;
-    overflow: hidden;
   }
 
-  .vault{
-    background-color: rgba(100,100,100,.5);
-    border-radius: 10px;
-    padding: 0.5rem; 
+  .place-btn {
+    position: absolute;
+    top: 85%;
+    width: 300px;
+    /* visibility: hidden; */
+  }
+
+  .btn-view {
+    float: left;
+  }
+
+  .place-btn-dropdown {
+    float: right;
+    width: auto;
+  }
+
+  .place-btn:hover {
+    visibility: visible;
+  }
+
+  #viewKeepModal {
+    width: auto;
   }
 </style>

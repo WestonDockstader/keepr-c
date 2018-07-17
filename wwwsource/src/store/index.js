@@ -47,7 +47,6 @@ export default new vuex.Store({
   },
   actions:{
     register({commit}, payload){
-      console.log(payload)
       auth.post('register',payload)
         .then(res=>{
           console.log(res)
@@ -58,7 +57,6 @@ export default new vuex.Store({
         })
     },
     login({commit}, payload){
-      console.log(payload)
       auth.post('login',payload)
         .then(res=>{
           console.log(res.data)
@@ -153,7 +151,6 @@ export default new vuex.Store({
     getVaultKeeps({commit},payload){
       api.get('vaultkeeps/vk/'+payload)
         .then(res=>{
-          console.log('vaultkeeps',res.data)
           commit('setVaultKeeps',res.data)
         })
         .catch(err=>{
@@ -161,7 +158,6 @@ export default new vuex.Store({
         })
     },
     addToVaultKeep({},payload){
-      console.log("this payload went to store",payload)
       api.post('vaultkeeps',payload)
         .then(res=>{
           console.log(res.data)

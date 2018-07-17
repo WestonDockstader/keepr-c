@@ -21,6 +21,8 @@ namespace keepr_c.Controllers
     [HttpPost]
     public Vault Create([FromBody]Vault newVault)
     { 
+      // var user = HttpContext.User;
+      // newVault.UserId = user.Identity.Name;
       if(ModelState.IsValid)
       {
         return db.CreateVault(newVault);

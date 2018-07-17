@@ -21,6 +21,8 @@ namespace keepr_c.Controllers
     [HttpPost]
     public VaultKeep Create([FromBody]VaultKeep newVaultKeep)
     {
+      // var user = HttpContext.User;
+      // newVaultKeep.UserId = user.Identity.Name;
       if(ModelState.IsValid)
       {
         return db.CreateVaultKeep(newVaultKeep);
