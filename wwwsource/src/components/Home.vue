@@ -54,17 +54,24 @@
       <div class="col-12">
         <hr>
       </div>
-      <div class="col" v-if="profileView==0">
-        <!-- view a list of vaults -->
-        <h3 v-if="viewvaults">Your Vaults</h3>
-        <div v-if="viewvaults" v-for="vault in vaults" class="vault d-flex flex-row justify-content-around" @click="getVaultKeeps(vault.id),viewvaults=false,vaultname=vault.name">
-          <h4>{{vault.name}}</h4>
-          <img src="../../../vault-door-clipart-1.jpg" class="vault-img" alt="">
-          <button class="btn btn-outline-danger" @click="deleteVault(vault)">X</button>
+    </div>
+    <!-- view a list of vaults -->
+    <div class="row" v-if="profile">
+      <div class="d-flex" v-if="profileView==0">
+        <div v-if="viewvaults">
+          <h3>Your Vaults</h3>
+          <div v-for="vault in vaults" class="vault" @click="getVaultKeeps(vault.id),viewvaults=false,openvault=vault">
+            <h4>{{vault.name}}</h4>
+            <button class="t-btn btn btn-outline-danger" @click="deleteVault(vault)">X</button>
+            <img src="../../../vault-door-clipart-1.jpg" class="vault-img" alt="">
+          </div>
         </div>
+      </div>
+    </div>
         <!-- View vault after selected -->
         <div v-if="!viewvaults">
-          {{vaultname}}
+          <h3>{{openvault.name}}</h3>
+          <p>{{openvault.description}}</p>
           <button class="btn btn-outline-success" @click="viewvaults=true,vaultname=''">Back</button>
         </div>
         <div class="keep" v-if="!viewvaults" v-for="keep in vaultkeeps">
@@ -80,7 +87,6 @@
             </div>
           </div>
         </div>
-      </div>
       <!-- view profile keeps -->
       <div class="col d-flex d-inline" v-if="profileView==1">
         <div class="keep" v-for="keep in keeps" v-if="keep.userId==user.id">
@@ -91,7 +97,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -120,7 +125,7 @@
         viewKeep: {},
         profileView: 0,
         viewvaults: true,
-        vaultname: ''
+        openvault: {}
       }
     },
     mounted() {
@@ -186,9 +191,11 @@
   }
 
   .vault {
-    background-color: rgba(100, 100, 100, .5);
+    background-color: rgba(47, 79, 79, .5);
     border-radius: 10px;
     padding: 0.5rem;
+    margin: 0.5rem;
+    position: relative;
   }
 
   .keep {
@@ -231,8 +238,13 @@
   .view-img {
     display: inline-block;
   }
+
   .vault-img {
     height: 250px;
     width: 250px;
+  }
+
+  .t-btn {
+    height: 10rem;
   }
 </style>
