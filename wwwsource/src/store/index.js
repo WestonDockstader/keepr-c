@@ -23,7 +23,7 @@ export default new vuex.Store({
   state:{
     user: {},
     keeps:{},
-    vaults: {},
+    vaults: [],
     //testing
     vaultkeeps: {}
   },
